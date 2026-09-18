@@ -1,0 +1,13 @@
+{
+  "app_name": "A-Chatz",
+  "chats": "Chats",
+  "status": "Status",
+  "calls": "Calls",
+  "profile": "Profile",
+  "settings": "Settings",
+  "help": "Help",
+  "app_language": "App Language",
+  "notifications": "Notifications",
+  "storage_and_data": "Storage and Data",
+  "language_updated": "Language updated successfully!"
+}

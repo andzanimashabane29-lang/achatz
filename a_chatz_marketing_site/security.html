@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A-Chatz - The ultimate messaging and collaboration platform by Drixel Labs Inc.">
+    <title>A-Chatz | Security</title>
+    <link rel="stylesheet" href="style.css?v=2">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dark-theme">
+    <div class="ambient-background">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <header class="glass-nav">
+        <div class="nav-container">
+            <a href="index.html" class="logo">A-Chatz</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="features.html">Features</a></li>
+                    <li><a href="how-it-works.html">How It Works</a></li>
+                    <li><a href="security.html">Security</a></li>
+                    <li><a href="download.html">Download</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html" class="btn-primary-outline">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="security section-padding" style="margin-top: 6rem;">
+            <div class="container split-layout">
+                <div class="security-visual fade-in-up">
+                    <div class="shield-container float-animation">
+                        <i class="fas fa-shield-alt shield-icon"></i>
+                        <div class="pulse-ring"></div>
+                    </div>
+                </div>
+                <div class="security-text fade-in-up delay-1">
+                    <h2>Ironclad <span class="text-gradient">Security & Privacy</span></h2>
+                    <p>Your dialogues are strictly your intellectual property. At Drixel Labs Inc., we architected A-Chatz around an uncompromising privacy-first paradigm. </p>
+                    
+                    <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--primary);">Advanced Local Storage Encryption</h3>
+                    <p>Unlike ordinary messaging applications that store your chats in plain text on their servers, A-Chatz utilizes a revolutionary local storage encryption model. Your messages are downloaded and written into the local memory of your specific device using an impenetrable `cipherText` payload. This means:</p>
+                    <ul class="check-list">
+                        <li><i class="fas fa-database"></i> <strong>Zero-Knowledge Architecture:</strong> We cannot read your locally encrypted SQLite/Hive databases.</li>
+                        <li><i class="fas fa-mobile-alt"></i> <strong>Device Theft Protection:</strong> Even if your device is physically compromised or stolen, malicious actors cannot extract the raw database files and read your chats, as the local storage is strictly bound to your Biometric hardware keys.</li>
+                        <li><i class="fas fa-check-circle"></i> <strong>Decrypted Text Renders:</strong> The `decrypted_text.dart` module only reconstructs the human-readable message inside the volatile RAM while you are looking at the screen, immediately destroying the keys when you close the app.</li>
+                    </ul>
+
+                    <h3 style="margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--primary);">Granular Privacy</h3>
+                    <p>Take absolute control over your digital footprint. Our Firestore privacy nodes allow you to customize who can view your Profile, Last Seen, and Statuses. Lock specific highly-sensitive chat rooms behind secondary PINs or Face ID using our Locked Chats feature.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="glass-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <h3>A-Chatz</h3>
+                <p>A product by Drixel Labs Inc.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <div class="link-column">
+                    <h4>Ecosystem</h4>
+                    <a href="features.html">Capabilities</a>
+                    <a href="how-it-works.html">Architecture</a>
+                    <a href="security.html">Encryption</a>
+                </div>
+                <div class="link-column">
+                    <h4>Drixel Labs Inc.</h4>
+                    <a href="about.html">Our Founders</a>
+                    <a href="news.html">Announcements</a>
+                    <a href="contact.html">Corporate Inquiries</a>
+                </div>
+                <div class="link-column">
+                    <h4>Legal & Compliance</h4>
+                    <a href="privacy.html">Privacy Architecture</a>
+                    <a href="terms.html">Terms of Service</a>
+                    <a href="data-protection.html">Data Protection Policy</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Drixel Labs Inc. All rights reserved. Founded by Anelisa Thelejane & Andzani Mashabane.</p>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

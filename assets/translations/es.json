@@ -1,0 +1,13 @@
+{
+  "app_name": "A-Chatz",
+  "chats": "Chats",
+  "status": "Estado",
+  "calls": "Llamadas",
+  "profile": "Perfil",
+  "settings": "Ajustes",
+  "help": "Ayuda",
+  "app_language": "Idioma de la aplicación",
+  "notifications": "Notificaciones",
+  "storage_and_data": "Almacenamiento y datos",
+  "language_updated": "¡Idioma actualizado con éxito!"
+}
