@@ -250,6 +250,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
   }
 
+  Future<void> _signInWithDrixelId() async {
+    if (loading) return;
+    setState(() => loading = true);
+    try {
+      final launched = await ref
+          .read(authRepositoryProvider)
+          .signInWithDrixelId();
+      if (!launched && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not open Drixel ID sign-in.')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Drixel ID sign-in failed: ${getCleanErrorMessage(e)}')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => loading = false);
+    }
+  }
+
   Future<void> submit() async {
     setState(() => loading = true);
 
@@ -715,6 +738,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ],
                     ],
                   ),
+                  if (!_isWebOrDesktop && !isRegistering) ...[
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 52,
+                      child: OutlinedButton.icon(
+                        onPressed: loading ? null : _signInWithDrixelId,
+                        icon: const Icon(Icons.account_circle_outlined, size: 19),
+                        label: const Text('Continue with Drixel ID'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          side: const BorderSide(color: Colors.white24),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                   if (!_isWebOrDesktop) ...[
                     const SizedBox(height: 20),
                     TextButton(
@@ -1254,6 +1296,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         : Text(isRegistering ? 'Create Account' : 'Sign In', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                   ),
                 ),
+                if (kIsWeb && !isRegistering) ...[
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: OutlinedButton.icon(
+                      onPressed: loading ? null : _signInWithDrixelId,
+                      icon: const Icon(Icons.account_circle_outlined, size: 19),
+                      label: const Text('Continue with Drixel ID'),
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        side: const BorderSide(color: Colors.white24),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ],
             ),
           ),
