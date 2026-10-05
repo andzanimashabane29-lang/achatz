@@ -74,6 +74,15 @@
 		<string>A-Chatz needs microphone access for voice notes, calling, and the A-Chatz AI hands-free voice assistant.</string>
 		<key>NSSpeechRecognitionUsageDescription</key>
 		<string>A-Chatz needs speech recognition access to transcribe and execute your hands-free voice commands.</string>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>a-chatz</string>
+				</array>
+			</dict>
+		</array>
 		<key>UIBackgroundModes</key>
 		<array>
 			<string>audio</string>

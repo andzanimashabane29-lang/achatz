@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:a_chatz/src/core/services/encryption_service.dart';
 import 'package:a_chatz/src/features/auth/domain/app_user.dart';
 import 'package:a_chatz/src/core/supabase/supabase.dart';
 import 'package:flutter/foundation.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as sb;
 
 class AuthRepository {
   AuthRepository(this._auth, this._db);
@@ -10,7 +13,53 @@ class AuthRepository {
 
   String? get uid => _auth.currentUser?.uid;
 
-  Stream<User?> authState() => _auth.authStateChanges();
+  Stream<User?> authState() => _auth.authStateChanges().map((user) {
+    if (user != null) unawaited(_syncDrixelIdAccount());
+    return user;
+  });
+
+  Future<void> _syncDrixelIdAccount() async {
+    final user = SupabaseConfig.client.auth.currentUser;
+    final hasDrixelIdentity = user?.identities?.any((identity) => identity.provider == 'keycloak') ?? false;
+    if (!hasDrixelIdentity) return;
+    try {
+      await SupabaseConfig.client.functions.invoke('drixel-account-sync');
+    } catch (error) {
+      // Directory sync must not interrupt A-Chatz sign-in. The backend rejects
+      // inactive memberships and does not reactivate them implicitly.
+      debugPrint('Drixel ID account sync failed: $error');
+    }
+  }
+
+  String? get _drixelIdRedirect {
+    if (kIsWeb) return null;
+    if (defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS) {
+      return 'a-chatz://login-callback/';
+    }
+    return null;
+  }
+
+  /// Starts a Drixel ID sign-in through the configured Keycloak provider.
+  /// The Supabase project must have the Keycloak provider configured first.
+  Future<bool> signInWithDrixelId({String? redirectTo}) {
+    return SupabaseConfig.client.auth.signInWithOAuth(
+      sb.OAuthProvider.keycloak,
+      scopes: 'openid',
+      redirectTo: redirectTo ?? _drixelIdRedirect,
+    );
+  }
+
+  /// Links Drixel ID to the already-authenticated A-Chatz account.
+  /// This preserves the existing Supabase user ID and its app data.
+  Future<bool> linkDrixelId({String? redirectTo}) {
+    return SupabaseConfig.client.auth.linkIdentity(
+      sb.OAuthProvider.keycloak,
+      scopes: 'openid',
+      redirectTo: redirectTo ?? _drixelIdRedirect,
+    );
+  }
+
 
   Future<UserCredential> signInWithEmail(String email, String password) async {
     final isOfficial = email.trim().toLowerCase() == 'official@a-chatz.com';
