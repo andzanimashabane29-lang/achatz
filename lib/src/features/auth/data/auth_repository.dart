@@ -13,13 +13,22 @@ class AuthRepository {
 
   Stream<User?> authState() => _auth.authStateChanges();
 
+  String? get _drixelIdRedirect {
+    if (kIsWeb) return null;
+    if (defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS) {
+      return 'a-chatz://login-callback/';
+    }
+    return null;
+  }
+
   /// Starts a Drixel ID sign-in through the configured Keycloak provider.
   /// The Supabase project must have the Keycloak provider configured first.
   Future<bool> signInWithDrixelId({String? redirectTo}) {
     return SupabaseConfig.client.auth.signInWithOAuth(
       sb.OAuthProvider.keycloak,
       scopes: 'openid',
-      redirectTo: redirectTo,
+      redirectTo: redirectTo ?? _drixelIdRedirect,
     );
   }
 
@@ -29,7 +38,7 @@ class AuthRepository {
     return SupabaseConfig.client.auth.linkIdentity(
       sb.OAuthProvider.keycloak,
       scopes: 'openid',
-      redirectTo: redirectTo,
+      redirectTo: redirectTo ?? _drixelIdRedirect,
     );
   }
 
