@@ -16,6 +16,7 @@ import 'package:a_chatz/src/features/profile/presentation/help_center_screens.da
 import 'package:a_chatz/src/shared/widgets/theme_picker_sheet.dart';
 import 'package:a_chatz/src/core/theme/theme_provider.dart';
 import 'package:a_chatz/src/core/theme/app_theme_preset.dart';
+import 'package:a_chatz/src/features/auth/providers/auth_providers.dart';
 
 class SettingsChatsScreen extends ConsumerStatefulWidget {
   const SettingsChatsScreen({super.key});
@@ -843,6 +844,29 @@ class _SettingsAccountScreenState extends ConsumerState<SettingsAccountScreen> {
     }
   }
 
+  Future<void> _linkDrixelId() async {
+    try {
+      final launched = await ref
+          .read(authRepositoryProvider)
+          .linkDrixelId();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            launched
+                ? 'Complete sign-in in the browser to link Drixel ID to this account.'
+                : 'Could not open Drixel ID linking.',
+          ),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not link Drixel ID: $e')),
+      );
+    }
+  }
+
   Future<void> _showChangeEmailDialog() async {
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
@@ -1072,6 +1096,12 @@ class _SettingsAccountScreenState extends ConsumerState<SettingsAccountScreen> {
               leading: const Icon(Icons.email_outlined),
               title: const Text('Change Email'),
               onTap: _showChangeEmailDialog,
+            ),
+            ListTile(
+              leading: const Icon(Icons.account_circle_outlined, color: Colors.blueAccent),
+              title: const Text('Link Drixel ID'),
+              subtitle: const Text('Connect your Drixel sign-in to this A-Chatz account'),
+              onTap: _linkDrixelId,
             ),
             ListTile(
               leading: const Icon(Icons.delete_outline, color: Colors.red),
