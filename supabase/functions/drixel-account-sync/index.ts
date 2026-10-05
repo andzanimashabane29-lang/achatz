@@ -28,16 +28,16 @@ Deno.serve(async (request) => {
   }
 
   try {
-    const verifiedResponse = await fetch(\`\${supabaseUrl}/auth/v1/user\`, {
-      headers: { apikey: anonKey, Authorization: \`Bearer \${match[1]}\` },
+    const verifiedResponse = await fetch(`${supabaseUrl}/auth/v1/user`, {
+      headers: { apikey: anonKey, Authorization: `Bearer ${match[1]}` },
     });
     if (!verifiedResponse.ok) return json(401, { error: "Invalid authentication token" });
     const verifiedUser = await verifiedResponse.json();
     if (typeof verifiedUser.id !== "string") return json(401, { error: "Invalid authentication token" });
 
     const adminResponse = await fetch(
-      \`\${supabaseUrl}/auth/v1/admin/users/\${encodeURIComponent(verifiedUser.id)}\`,
-      { headers: { apikey: serviceRoleKey, Authorization: \`Bearer \${serviceRoleKey}\` } },
+      `${supabaseUrl}/auth/v1/admin/users/${encodeURIComponent(verifiedUser.id)}`,
+      { headers: { apikey: serviceRoleKey, Authorization: `Bearer ${serviceRoleKey}` } },
     );
     if (!adminResponse.ok) return json(503, { error: "Could not verify linked Drixel ID" });
     const adminUser = await adminResponse.json();
@@ -56,10 +56,10 @@ Deno.serve(async (request) => {
       ? identityData.full_name
       : typeof identityData.name === "string" ? identityData.name : "";
 
-    const syncResponse = await fetch(\`\${drixelApiUrl}/api/service-accounts/sync\`, {
+    const syncResponse = await fetch(`${drixelApiUrl}/api/service-accounts/sync`, {
       method: "POST",
       headers: {
-        Authorization: \`Bearer \${drixelServiceKey}\`,
+        Authorization: `Bearer ${drixelServiceKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
