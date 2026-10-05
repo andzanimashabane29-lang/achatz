@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:a_chatz/src/core/services/encryption_service.dart';
 import 'package:a_chatz/src/features/auth/domain/app_user.dart';
 import 'package:a_chatz/src/core/supabase/supabase.dart';
@@ -11,7 +13,23 @@ class AuthRepository {
 
   String? get uid => _auth.currentUser?.uid;
 
-  Stream<User?> authState() => _auth.authStateChanges();
+  Stream<User?> authState() => _auth.authStateChanges().map((user) {
+    if (user != null) unawaited(_syncDrixelIdAccount());
+    return user;
+  });
+
+  Future<void> _syncDrixelIdAccount() async {
+    final user = SupabaseConfig.client.auth.currentUser;
+    final hasDrixelIdentity = user?.identities?.any((identity) => identity.provider == 'keycloak') ?? false;
+    if (!hasDrixelIdentity) return;
+    try {
+      await SupabaseConfig.client.functions.invoke('drixel-account-sync');
+    } catch (error) {
+      // Directory sync must not interrupt A-Chatz sign-in. The backend rejects
+      // inactive memberships and does not reactivate them implicitly.
+      debugPrint('Drixel ID account sync failed: $error');
+    }
+  }
 
   String? get _drixelIdRedirect {
     if (kIsWeb) return null;
