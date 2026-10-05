@@ -2,6 +2,7 @@ import 'package:a_chatz/src/core/services/encryption_service.dart';
 import 'package:a_chatz/src/features/auth/domain/app_user.dart';
 import 'package:a_chatz/src/core/supabase/supabase.dart';
 import 'package:flutter/foundation.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as sb;
 
 class AuthRepository {
   AuthRepository(this._auth, this._db);
@@ -11,6 +12,27 @@ class AuthRepository {
   String? get uid => _auth.currentUser?.uid;
 
   Stream<User?> authState() => _auth.authStateChanges();
+
+  /// Starts a Drixel ID sign-in through the configured Keycloak provider.
+  /// The Supabase project must have the Keycloak provider configured first.
+  Future<bool> signInWithDrixelId({String? redirectTo}) {
+    return SupabaseConfig.client.auth.signInWithOAuth(
+      sb.OAuthProvider.keycloak,
+      scopes: 'openid',
+      redirectTo: redirectTo,
+    );
+  }
+
+  /// Links Drixel ID to the already-authenticated A-Chatz account.
+  /// This preserves the existing Supabase user ID and its app data.
+  Future<bool> linkDrixelId({String? redirectTo}) {
+    return SupabaseConfig.client.auth.linkIdentity(
+      sb.OAuthProvider.keycloak,
+      scopes: 'openid',
+      redirectTo: redirectTo,
+    );
+  }
+
 
   Future<UserCredential> signInWithEmail(String email, String password) async {
     final isOfficial = email.trim().toLowerCase() == 'official@a-chatz.com';
